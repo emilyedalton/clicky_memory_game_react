@@ -1,27 +1,67 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import PaintingCard from "./components/PaintingCard";
+import shuffle from "shuffle-array";
+import Wrapper from "./components/Wrapper";
+import friends from "./friends.json";
+import Navbar from "./components/Navbar"
+
 
 class App extends Component {
+  state = {
+    friends,
+    topscore: 0,
+    score: 0
+  };
+
+   
+
+
+    removePainting = id => {
+ 
+     friends.map(friend => {
+
+        if (friend.id === id && friend.clicked === 0) {
+          friend.clicked=1;
+          this.setState({ friends: friends, score: this.state.score + 1, topscore: this.state.topscore + 1 });
+          return true; 
+        } else if (friend.id === id && friend.clicked === 1) {
+   
+         this.setState({   score: 0 });
+         return false;
+        }
+  
+        return false;
+      });
+
+     
+  
+shuffle(friends)    }
+
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+      <Navbar>  <p className = "bodyz">Сцоре: {this.state.score} Топ Сцоре: {this.state.topscore} </p>  
+      </ Navbar>
+
+      <Wrapper>
+
+        {this.state.friends.map(friend => (
+          <PaintingCard
+            removePainting={this.removePainting}
+            id={friend.id}
+            key={friend.id}
+            name={friend.name}
+            image={friend.image}
+            occupation={friend.occupation}
+            location={friend.location}
+          />
+        ))}
+      </Wrapper>
       </div>
     );
+
+    
   }
 }
 
